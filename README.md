@@ -7,6 +7,12 @@
 
 ---
 
+### 🌐 Live Demo
+- **Frontend App**: [https://legal-aid-assistant-ten.vercel.app](https://legal-aid-assistant-ten.vercel.app)
+- **Backend API**: [https://legal-aid-backend-8lg9.onrender.com](https://legal-aid-backend-8lg9.onrender.com)
+
+---
+
 ## 🚀 Key Features
 
 - **Scope Discipline**: A focused, working prototype specifically targeted at BNS (Criminal Law), BNSS (Procedure), and Consumer Protection.
