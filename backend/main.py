@@ -13,7 +13,7 @@ app = FastAPI(title="Legal Aid Assistant API")
 # Enable CORS for the frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, restrict this
+    allow_origins=["*"],  # In production, restrict this
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -26,6 +26,10 @@ INDEX_DIR = os.path.join(BASE_DIR, "data", "processed", "chroma")
 rag = RAGEngine(data_dir=DATA_DIR, persist_dir=INDEX_DIR)
 client = groq.Groq(api_key=os.getenv("GROQ_API_KEY"))
 
+@app.get("/")
+def root():
+    return {"status": "Legal Aid Assistant API is running", "version": "1.0"}
+
 @app.post("/chat", response_model=AIResponse)
 async def chat(user_query: UserQuery):
     try:
@@ -33,7 +37,7 @@ async def chat(user_query: UserQuery):
         relevant_chunks = rag.query(user_query.text)
         context = "\n\n".join([f"Source: {c.act_name}\n{c.text}" for c in relevant_chunks])
 
-        # 2. Build Prompt for Claude
+        # 2. Build Prompt
         system_prompt = f"""You are a Legal Aid Assistant for common people in India. 
 Your goal is to explain legal information in simple, plain language based ON THE PROVIDED CONTEXT.
 If the context doesn't contain the answer, say you don't have enough specific legal information but provide general guidance based on common knowledge of Indian law.
