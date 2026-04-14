@@ -3,7 +3,9 @@ import { Send, Scale, Info, ShieldAlert, BookOpen, User, Languages } from 'lucid
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const API_BASE = '/api';
+const API_BASE = import.meta.env.PROD
+  ? 'https://legal-aid-backend-8lg9.onrender.com'
+  : '/api';
 
 function App() {
   const [messages, setMessages] = useState([]);
