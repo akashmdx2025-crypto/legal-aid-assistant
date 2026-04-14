@@ -6,7 +6,8 @@ import groq
 from .schemas import UserQuery, AIResponse, GuardrailLog
 from .rag_engine import RAGEngine
 
-load_dotenv()
+BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(BACKEND_DIR, ".env"))
 
 app = FastAPI(title="Legal Aid Assistant API")
 
