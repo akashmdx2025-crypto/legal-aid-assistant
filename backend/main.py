@@ -39,6 +39,9 @@ async def chat(user_query: UserQuery):
         context = "\n\n".join([f"Source: {c.act_name}\n{c.text}" for c in relevant_chunks])
 
         # 2. Build Prompt
+        language_map = {"en": "English", "hi": "Hindi"}
+        target_language = language_map.get(user_query.language, "English")
+
         system_prompt = f"""You are a Legal Aid Assistant for common people in India. 
 Your goal is to explain legal information in simple, plain language based ON THE PROVIDED CONTEXT.
 If the context doesn't contain the answer, say you don't have enough specific legal information but provide general guidance based on common knowledge of Indian law.
@@ -50,7 +53,7 @@ RULES:
 - Be empathetic and clear.
 - Use simple terms, not legalese.
 - Always cite which Act (BNS/BNSS/Consumer Protection) you are referring to.
-- Support both English and Hindi logic if the user asks in those languages.
+- IMPORTANT: You MUST respond in {target_language}.
 """
 
         # 3. Call Groq (Llama 3.3 70B)

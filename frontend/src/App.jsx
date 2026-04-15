@@ -15,6 +15,43 @@ function App() {
   const [language, setLanguage] = useState('en');
   const scrollRef = useRef(null);
 
+  const translations = {
+    en: {
+      title: "Legal Aid Assistant",
+      subtitle: "Empowering Common People with Knowledge",
+      disclaimer: "IMPORTANT: This AI provides information, not legal advice. Always consult a qualified lawyer.",
+      welcome: "How can I help you today?",
+      welcomeDesc: "Describe your legal concern in plain language. For example:",
+      inputPlaceholder: "Describe your legal problem...",
+      viewRefs: "View References",
+      references: "References",
+      examples: [
+        "What are my rights if I'm arrested?",
+        "How do I file a consumer complaint?",
+        "What is the punishment for cheating in BNS?",
+        "My landlord is forcing me to vacate without notice."
+      ]
+    },
+    hi: {
+      title: "कानूनी सहायता सहायक",
+      subtitle: "आम लोगों को ज्ञान के साथ सशक्त बनाना",
+      disclaimer: "महत्वपूर्ण: यह एआई जानकारी प्रदान करता है, कानूनी सलाह नहीं। हमेशा एक योग्य वकील से परामर्श करें।",
+      welcome: "मैं आज आपकी कैसे सहायता कर सकता हूँ?",
+      welcomeDesc: "अपनी कानूनी चिंता को सरल भाषा में समझाएं। उदाहरण के लिए:",
+      inputPlaceholder: "अपनी कानूनी समस्या का वर्णन करें...",
+      viewRefs: "संदर्भ देखें",
+      references: "संदर्भ",
+      examples: [
+        "अगर मुझे गिरफ्तार किया जाता है तो मेरे क्या अधिकार हैं?",
+        "मैं उपभोक्ता शिकायत कैसे दर्ज करूँ?",
+        "BNS में धोखाधड़ी की सजा क्या है?",
+        "मेरा मकान मालिक मुझे बिना नोटिस के खाली करने के लिए मजबूर कर रहा है।"
+      ]
+    }
+  };
+
+  const t = translations[language];
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -65,17 +102,20 @@ function App() {
             <Scale className="text-white" size={24} />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900 leading-tight">Legal Aid Assistant</h1>
-            <p className="text-xs text-slate-500 font-medium">Empowering Common People with Knowledge</p>
+            <h1 className="text-xl font-bold text-slate-900 leading-tight">{t.title}</h1>
+            <p className="text-xs text-slate-500 font-medium">{t.subtitle}</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
           <button 
             onClick={() => setLanguage(lang => lang === 'en' ? 'hi' : 'en')}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 text-sm font-medium hover:bg-slate-50 transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 text-sm font-medium hover:bg-legal-50 hover:border-legal-200 transition-colors bg-white shadow-sm"
           >
-            <Languages size={16} />
-            {language === 'en' ? 'हिन्दी' : 'English'}
+            <Languages size={16} className="text-legal-600" />
+            <span>{language === 'en' ? 'English' : 'हिन्दी'}</span>
+            <span className="text-[10px] text-slate-400 border-l border-slate-200 pl-2 ml-1">
+              {language === 'en' ? 'Switch to हिन्दी' : 'English में बदलें'}
+            </span>
           </button>
           <div className="flex items-center gap-2 text-amber-600 px-3 py-1.5 bg-amber-50 rounded-full text-xs font-semibold border border-amber-100">
             <ShieldAlert size={14} />
@@ -87,7 +127,7 @@ function App() {
       {/* Disclaimer Banner */}
       <div className="bg-slate-900 text-slate-300 py-2 px-6 text-[10px] md:text-xs flex items-center justify-center gap-2 text-center">
         <Info size={12} className="shrink-0" />
-        IMPORTANT: This AI provides information, not legal advice. Always consult a qualified lawyer.
+        {t.disclaimer}
       </div>
 
       <main className="flex-1 flex overflow-hidden">
@@ -100,19 +140,14 @@ function App() {
             {messages.length === 0 && (
               <div className="max-w-2xl mx-auto mt-20 text-center space-y-6">
                 <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-                  <h2 className="text-2xl font-bold text-slate-900 mb-4">How can I help you today?</h2>
-                  <p className="text-slate-600 mb-8">Describe your legal concern in plain language. For example:</p>
+                  <h2 className="text-2xl font-bold text-slate-900 mb-4">{t.welcome}</h2>
+                  <p className="text-slate-600 mb-8">{t.welcomeDesc}</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-left">
-                    {[
-                      "What are my rights if I'm arrested?",
-                      "How do I file a consumer complaint?",
-                      "What is the punishment for cheating in BNS?",
-                      "My landlord is forcing me to vacate without notice."
-                    ].map((q, i) => (
+                    {t.examples.map((q, i) => (
                       <button 
                         key={i}
                         onClick={() => setInput(q)}
-                        className="p-3 text-sm border border-slate-200 rounded-xl hover:border-legal-600 hover:bg-legal-50 transition-all text-slate-700"
+                        className="p-3 text-sm border border-slate-200 rounded-xl hover:border-legal-600 hover:bg-legal-50 transition-all text-slate-700 text-left"
                       >
                         {q}
                       </button>
@@ -152,7 +187,7 @@ function App() {
                           className="mt-4 flex items-center gap-1.5 text-xs font-bold text-legal-600 hover:text-legal-800 uppercase tracking-wider"
                         >
                           <BookOpen size={14} />
-                          View References ({msg.sources.length})
+                          {t.viewRefs} ({msg.sources.length})
                         </button>
                       )}
                     </div>
@@ -179,7 +214,7 @@ function App() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                placeholder="Describe your legal problem..."
+                placeholder={t.inputPlaceholder}
                 className="w-full p-4 pr-16 bg-slate-100 border-none rounded-2xl focus:ring-2 focus:ring-legal-600 transition-all text-slate-900"
               />
               <button 
@@ -206,7 +241,7 @@ function App() {
                 <div className="flex justify-between items-center mb-6">
                   <h3 className="font-bold text-lg flex items-center gap-2">
                     <BookOpen size={20} className="text-legal-600" />
-                    References
+                    {t.references}
                   </h3>
                   <button onClick={() => setSelectedSources(null)} className="text-slate-400 hover:text-slate-600">
                     ✕
